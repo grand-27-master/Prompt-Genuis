@@ -7,7 +7,7 @@ import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
 
 const NavBar = () => {
 
-  const isUserLoggedIn = false
+  const isUserLoggedIn = true
   const [providers, setProviders] = useState(null)
 
   const [menuOpen, setMenuOpen] = useState(false)
@@ -46,7 +46,7 @@ const NavBar = () => {
             </button>
 
             <Link href='/profile' className='flex gap-2'>
-              <Image src="/assets/images/logo.svg" width={40} height={40} className='rounded-full' alt='profile'></Image>
+              <Image src="/assets/icons/menu.svg" width={40} height={40} className='rounded-full' alt='profile'></Image>
               </Link>
           </div>
         ) : (
@@ -65,7 +65,7 @@ const NavBar = () => {
       <div className='sm:hidden flex relative'>
       {isUserLoggedIn ? (
           <div className='flex gap-3 md:gap-5'>
-            <Image src="/assets/images/logo.svg" width={40} height={40} className='rounded-full' alt='profile' onClick={()=>{
+            <Image src="/assets/icons/menu.svg" width={40} height={40} className='rounded-full' alt='profile' onClick={()=>{
               setMenuOpen(!menuOpen)
             }}></Image>
 
