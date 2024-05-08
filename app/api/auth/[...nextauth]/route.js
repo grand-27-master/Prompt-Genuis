@@ -1,5 +1,7 @@
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
+import {connectDB} from "../../../utils/database";
+import User from "@/models/user";
 
 const handler = NextAuth({
     providers: [
@@ -10,20 +12,49 @@ const handler = NextAuth({
     ],
     async session({session})
     {
-        return session;
+        // return session;
+
+        const sessionUser=await User.findOne({email: session.user.email});
+
+        session.user.id=sessionUser._id.toString();
+        return sessionUser;
     },
 
-    async signIn({email, password})
+    async signIn({profile})
     {
-        if (email === process.env.ADMIN_EMAIL)
+    //     if (email === process.env.ADMIN_EMAIL)
+    //     {
+    //         if (password === process.env.ADMIN_PASSWORD)
+    //         {
+    //             return Promise.resolve({email: process.env.ADMIN_EMAIL});
+    //         }
+    //     }
+    //     return Promise.resolve(null);
+
+    try
+    {
+        // serverless 
+        await connectDB();
+
+        // check if user already exists
+        const user = await User.findOne({email: profile.email});
+
+        // if not create new user
+        if (!user)
         {
-            if (password === process.env.ADMIN_PASSWORD)
-            {
-                return Promise.resolve({email: process.env.ADMIN_EMAIL});
-            }
+            await User.create({
+                username: profile.name,
+                email: profile.email,
+                image: profile.picture,
+            });
         }
-        return Promise.resolve(null);
+    }
+
+    catch(error)
+    {
+        console.log(error);
+    }
     }
     });
 
-export default handler;
+export {handler as GET, handler as POST};

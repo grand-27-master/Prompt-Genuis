@@ -7,7 +7,10 @@ import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
 
 const NavBar = () => {
 
-  const isUserLoggedIn = true
+  // const isUserLoggedIn = true
+
+  const {data: session} = useSession()
+
   const [providers, setProviders] = useState(null)
 
   const [menuOpen, setMenuOpen] = useState(false)
@@ -35,7 +38,7 @@ const NavBar = () => {
     {/* Web */}
 
       <div className='sm:flex hidden'>
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className='flex gap-3 md:gap-5'>
             <Link href='/generate-prompt' className='black_btn'>
               Create Post
@@ -63,7 +66,7 @@ const NavBar = () => {
     {/* Mobile */}
 
       <div className='sm:hidden flex relative'>
-      {isUserLoggedIn ? (
+      {session?.user ? (
           <div className='flex gap-3 md:gap-5'>
             <Image src="/assets/icons/menu.svg" width={40} height={40} className='rounded-full' alt='profile' onClick={()=>{
               setMenuOpen(!menuOpen)
