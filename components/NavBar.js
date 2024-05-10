@@ -20,7 +20,7 @@ const NavBar = () => {
       const providers = await getProviders()
       setProviders(providers)
     }
-    setProviders()
+    fetchProviders()
   }, [])
 
   return ( 
